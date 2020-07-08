@@ -1,11 +1,12 @@
 {
-  "name": "circleci",
+  "name": "teste",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:cover": "yarn test --coverage"
   },
   "author": "",
   "license": "ISC",
