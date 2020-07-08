@@ -1,6 +1,8 @@
 version: 2.1
 orbs:
   node: circleci/node@1.1.6
+  coveralls: escaletech/coveralls@1.0.0
+
 jobs:
   build-and-test:
     executor:
@@ -9,9 +11,22 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm install
-            - run: npm test
+            - run: yarn install
+            - run: yarn test:cover
+            - coveralls/upload:
+                parallel: true
+                flag_name: build-and-test
+
+    coverage-done:
+      docker:
+        - image: 'circleci/node:10.0.0'
+      steps:
+        - coveralls/upload:
+            parallel_finished: true
+
 workflows:
     build-and-test:
       jobs:
         - build-and-test
+        - coverage-done:
+          requires: [ build-and-test ]
