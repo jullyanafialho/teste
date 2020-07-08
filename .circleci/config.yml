@@ -9,15 +9,18 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - run: yarn install
-      - run: yarn test:cover
+      - node/with-cache:
+        steps:
+          - run: yarn install
+          - run: yarn test:cover
       - coveralls/upload:
           parallel: true
           flag_name: build-and-test
             
   coverage-done:
-    docker:
-      - image: 'circleci/node:10.0.0'
+    executor:
+      name: node/default
+
     steps:
       - coveralls/upload:
           parallel_finished: true
